@@ -1,5 +1,6 @@
 #include <node.h>
 #include <string>
+#include <vector>
 
 #ifdef _WIN32
 
@@ -30,10 +31,13 @@ int exec(const char* command) {
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     ZeroMemory(&pi, sizeof(pi));
-
+    
+    int command_len = strlen(command);
+    std::vector<char> command_copy(&command[0], &command[command_len]);    
+	
     // Start the child process.
     if(!CreateProcess(NULL,     // No module name (use command line)
-                (LPSTR) command,// Command line
+                (LPSTR) &command_copy[0],// Command line
                 NULL,           // Process handle not inheritable
                 NULL,           // Thread handle not inheritable
                 FALSE,          // Set handle inheritance to FALSE
